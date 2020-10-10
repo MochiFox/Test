@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Simple Clicker</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <!--Internal stylesheet-->
+</head>
+
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <!--Logo/Name of site-->
+                <a class="navbar-brand" href="indexCopy.html">Mochi Clicker</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container text-center">
+        <h3>Units</h3>
+        <p class="leftalign" id="1"></p>
+        <p class="leftalign" id="2"></p>
+        <p class="leftalign" id="3"></p>
+        <p class="leftalign" id="4"></p>
+        <p class="leftalign" id="5"></p>
+        <br />
+        <!--Beginning profile images
+        Each one corresponds to a unit. Clicking it gains said unit-->
+        <div class="row">
+            <!--First profile image-->
+            <div class="col-sm-4 unit" onclick="getEnemyHP()">
+                <!--Name/title-->
+                <p class="text-center"><strong>Attack</strong></p>
+                <br />
+                <p class="text-center">ttak</p>
+                <br />
+                <!--Image-->
+                <img src="https://picsum.photos/255/255" class="img-circle person" alt="Random Name" width="255" height="255" />
+            </div>
+                        <!--First profile image-->
+            <div class="col-sm-4 unit" onclick="Initialise()">
+                <!--Name/title-->
+                <p class="text-center"><strong>reset</strong></p>
+                <br />
+                <p class="text-center">reset everything</p>
+                <br />
+                <!--Image-->
+                <img src="https://picsum.photos/255/255" class="img-circle person" alt="Random Name" width="255" height="255" />
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center">
+        <p>Mochi Box</p>
+    </footer>
+</body>
+<script src="NewScript.js"></script>
+</html>
