@@ -72,11 +72,13 @@ function showUpdate() {
 //functions for the units
 //a is one more for each click
 function getEnemyHP() {
-    EnemyHealth = EnemyHealth - HeroDamage;
-    if (EnemyHealth <= 0) {
-        Money = Money + 5;
-        Time = 0;
-        EnemyHealth = 10
+    if (paused == false) {
+        EnemyHealth = EnemyHealth - HeroDamage;
+        if (EnemyHealth <= 0) {
+            Money = Money + 5;
+            Time = 0;
+            EnemyHealth = 10
+        }
     }
     showUpdate();
 }
