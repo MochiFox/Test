@@ -1,7 +1,7 @@
-//letiables for each unit
+
 var EnemyHealth = 10;
 var EnemyDamage = 5;
-var EnemyNumber = 0;
+var EnemyNumber = 1;
 var EnemySpeed = 3;
 var Money = 200;
 var HeroExp = 0;
@@ -10,11 +10,17 @@ var HeroHealth = 100;
 var HeroDamage = 5;
 var Time = 0;
 var paused = false;
+var EnemyMaxHealth = 10;
+var AttackLevel = 1;
 
-let EnemyStats = {
-    1:["Goblin",10, 5, 5,], //10 health, 5 damage, 5 exp reward
-    2:["Gnoblin",20, 8, 10,] //10 health, 5 damage, 5 exp reward
-}
+let EnemyStats = [
+    {Name:"Goblin", Health:10, Damage:5, EXP:5, Gold:5, Speed:10},
+    {Name:"Gnoblin", Health:15, Damage:16, EXP:5, Gold:5, Speed:15},
+    {Name:"Gnomlin", Health:5, Damage:5, EXP:5, Gold:5, Speed:5},
+    {Name:"Gromlin", Health:5, Damage:8, EXP:5, Gold:5, Speed:8},
+    {Name:"Gremlin", Health:7, Damage:7, EXP:7, Gold:7, Speed:7},
+    {Name:"a", Health:99, Damage:9, EXP:9, Gold:9, Speed:9}
+]
 
 $(document).ready(function () {
     let units = window.localStorage.getItem('units');
@@ -22,6 +28,7 @@ $(document).ready(function () {
         units = JSON.parse(units);
 
         EnemyHealth = units['EnemyHealth'];
+        EnemyMaxHealth = units['EnemyMaxHealth'];
         HeroMaxHealth = units['HeroMaxHealth'];       
         HeroHealth = units['HeroHealth'];
         HeroDamage = units['HeroDamage'];
@@ -36,11 +43,12 @@ $(document).ready(function () {
     window.setInterval(function () {
         //set each unit
         showUpdate();
-
         getUpdate();
+        HeroDamage = AttackLevel * 5;
         window.localStorage.setItem(
             'units', JSON.stringify({
                 'EnemyHealth': EnemyHealth,
+                'EnemyMaxHealth': EnemyMaxHealth,
                 'HeroMaxHealth': HeroMaxHealth,
                 'HeroHealth': HeroHealth,
                 'HeroDamage': HeroDamage,
@@ -48,18 +56,20 @@ $(document).ready(function () {
                 'EnemyDamage': EnemyDamage,
                 'Time': Time,
                 'EnemySpeed': EnemySpeed,
-                'paused' : paused
+                'paused' : paused,
+                'AttackLevel': AttackLevel
             })
         );
     }, 100);
 }); 
 
 function showUpdate() {
-    document.getElementById("DisplayEnemyHP").innerHTML = "Enemy HP: " + EnemyHealth;
+    document.getElementById("DisplayEnemyHP").innerHTML = EnemyStats[EnemyNumber].Name +" HP: " + EnemyHealth + "/" + EnemyMaxHealth;
     document.getElementById("DisplayHeroHP").innerHTML = "HP: " + HeroHealth + "/" + HeroMaxHealth;
     document.getElementById("DisplayEnemyDamage").innerHTML = "The enemy is dealing " + EnemyDamage + ' damage every ' + EnemySpeed/10 + ' seconds';
-    document.getElementById("DisplayHeroDamage").innerHTML = "You're damage: " + HeroDamage;
-    document.getElementById("DisplayGold").innerHTML = "Gold: " + Money;
+    document.getElementById("DisplayHeroDamage").innerHTML = "Level: " + AttackLevel + " You're damage: " + HeroDamage;
+    document.getElementById("DisplayGold").innerHTML = "Gold: " + Money ;
+    document.getElementById("UpgradeCost").innerHTML = "Costs: " + AttackLevel * 2 ;
     if (paused == false) {
         document.getElementById("DisplayDead").innerHTML = "";
     }
@@ -77,12 +87,46 @@ function getEnemyHP() {
         if (EnemyHealth <= 0) {
             Money = Money + 5;
             Time = 0;
-            EnemyHealth = 10
+            EnemyHealth = EnemyMaxHealth;
         }
     }
     showUpdate();
 }
 
+function NextEnemy() {
+    if (paused == false) {
+        if (EnemyNumber < (EnemyStats.length - 1)) {
+            EnemyNumber = EnemyNumber + 1;
+            InitialiseEnemy(EnemyNumber);
+            Time = 0;
+        }
+        else {
+            EnemyNumber = EnemyStats.length - 1;
+        }
+    }
+    showUpdate();
+}
+
+function LastEnemy() {
+    if (paused == false) {
+        if (EnemyNumber > 0) {
+            EnemyNumber = EnemyNumber - 1;
+            InitialiseEnemy(EnemyNumber);
+            Time = 0;
+        }
+        else {
+            EnemyNumber = 0;
+        }
+    }
+    showUpdate();
+}
+
+function UpgradeAttack() {
+    if (Money >= AttackLevel * 2) {
+        Money = Money - AttackLevel * 2;
+        AttackLevel = AttackLevel + 1
+    }
+}
 function getUpdate() {
     if (Time >= EnemySpeed) {
         Time = 0
@@ -107,12 +151,19 @@ function getUpdate() {
 
 }
 
+function InitialiseEnemy(ID) {
+    EnemyMaxHealth = EnemyStats[ID].Health;
+    EnemyHealth = EnemyMaxHealth;
+    EnemyDamage = EnemyStats[ID].Damage;
+    EnemySpeed = EnemyStats[ID].Speed;
+}
+
 function Initialise() {
     EnemyHealth = 10;
-    EnemyDamage = 10;
-    EnemyNumber = 0;
-    EnemySpeed = 1;
-    Turn = 0;
+    EnemyDamage = 5;
+    EnemyNumber = 1;
+    EnemySpeed = 3;
+    AttackLevel = 1
     Money = 200;
     HeroExp = 0;
     HeroMaxHealth = 100;
@@ -120,5 +171,17 @@ function Initialise() {
     HeroDamage = 5;
     Time = 0;
     paused = false;
+    EnemyMaxHealth = 10;
+   
+    EnemyStats = [
+        {Name:"Glitch1", Health:1, Damage:1, EXP:1, Gold:1, Speed:1},
+        {Name:"Goblin", Health:10, Damage:5, EXP:5, Gold:5, Speed:10},
+        {Name:"Gnoblin", Health:15, Damage:16, EXP:5, Gold:5, Speed:15},
+        {Name:"Gnomlin", Health:5, Damage:5, EXP:5, Gold:5, Speed:5},
+        {Name:"Gromlin", Health:5, Damage:8, EXP:5, Gold:5, Speed:8},
+        {Name:"Gremlin", Health:7, Damage:7, EXP:7, Gold:7, Speed:7},
+        {Name:"a", Health:99, Damage:9, EXP:9, Gold:9, Speed:9},
+        {Name:"Glitch2", Health:1, Damage:1, EXP:1, Gold:1, Speed:1}
+    ]
     showUpdate();
 }
