@@ -159,10 +159,8 @@ function InitialiseEnemy(ID) {
 }
 
 function Initialise() {
-    EnemyHealth = 10;
-    EnemyDamage = 5;
+    InitialiseEnemy()
     EnemyNumber = 1;
-    EnemySpeed = 3;
     AttackLevel = 1
     Money = 200;
     HeroExp = 0;
