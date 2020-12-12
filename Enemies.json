@@ -1,6 +1,1 @@
-[{"Name":"Goblin", "Health":10, "Damage":5, "EXP":1, "Gold":5, "Speed":10},
-{"Name":"Gnoblin", "Health":15, "Damage":16, "EXP":3, "Gold":10, "Speed":15},
-{"Name":"Gnomlin", "Health":60, "Damage":20, "EXP":10, "Gold":25, "Speed":40},
-{"Name":"Gromlin", "Health":20, "Damage":2, "EXP":25, "Gold":45, "Speed":1},
-{"Name":"Gremlin", "Health":80, "Damage":20, "EXP":30, "Gold":50, "Speed":10},
-{"Name":"a", "Health":99, "Damage":9, "EXP":9, "Gold":9, "Speed":9}]
+[{"Name":"Goblin", "Health":10, "Damage":5, "EXP":1, "Gold":5, "Speed":10},{"Name":"Gnoblin", "Health":15, "Damage":16, "EXP":3, "Gold":10, "Speed":15},{"Name":"Gnomlin", "Health":60, "Damage":20, "EXP":10, "Gold":25, "Speed":40},{"Name":"Gromlin", "Health":20, "Damage":2, "EXP":25, "Gold":45, "Speed":1},{"Name":"Gremlin", "Health":80, "Damage":20, "EXP":30, "Gold":50, "Speed":10},{"Name":"a", "Health":99, "Damage":9, "EXP":9, "Gold":9, "Speed":9}]
