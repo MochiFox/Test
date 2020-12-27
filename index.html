@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>Simple Clicker</title>
     <meta charset="utf-8" />
@@ -33,7 +32,11 @@
         <p class="leftalign" id="DisplayHeroDamage"></p>
         <p class="leftalign" id="DisplayGold"></p>
         <p class="leftalign" id="DisplayDead"></p>
+        <p class="leftalign" id="Weapon"></p>
         <br />
+
+
+
         <!--Beginning profile images
         Each one corresponds to a unit. Clicking it gains said unit-->
         <div class="row">
@@ -59,7 +62,7 @@
             </div>
 
                         <!--First profile image-->
-            <div class="col-sm-4 unit" onclick="Initialise()">
+            <div class="col-sm-4 unit" onclick="ResetValues()">
                 <!--Name/title-->
                 <p class="text-center"><strong>reset</strong></p>
                 <br />
@@ -92,13 +95,40 @@
                 <img src="https://picsum.photos/255/255" class="img-circle person" alt="Random Name" width="255" height="255" draggable="false"/>
             </div>
         </div>
+
+        <table id="ShopTable" style="width:100%">
+        </table>
+        <table style="width:100%;">
+            <tr>
+                <td onclick="ShopPageFirst()"></td>
+                <td> <button style="width:100%;" onclick="ShopPagePrev()"> <-- </button> </td>
+                <td  style="border: 1px solid black;width:10%" id="ShopPage"></td>
+                <td> <button style="width:100%;" onclick="ShopPageNext()"> --> </button> </td>
+                <td onclick="ShopPageLast()"></td>
+            </tr>
+        </table>
     </div>
 
     <footer class="text-center">
         <p>Mochi Box</p>
     </footer>
 
+    <button type="button" onclick="CreateCustomTable(3, 4, 'CustomTable', ShopRowFunction)">Try it</button>
+
     
 </body>
+
+<style>
+.ShopTableCells {
+    border: 1px solid black;height:35px;
+}
+.ShopTableHeader {
+    border: 1px solid black;height:35px;color:black;
+}
+.ShopTableOwned{
+    border: 1px solid black;height:35px;color:white; background-color: grey;padding:0px 5px;
+}
+
+</style>
 <script src="script.js"></script>
 </html>
