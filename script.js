@@ -88,8 +88,9 @@ $(document).ready(function () {
         EnemyDamage = units['EnemyDamage'];
         EnemySpeed = units['EnemySpeed'];
         ETime = units['ETime'];
+        OwnedItems = units['OwnedItems']
     }
-
+    UpdateShop();
     showUpdate();
     //each second
     window.setInterval(function () {
