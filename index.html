@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Simple Clicker</title>
@@ -29,81 +29,34 @@
         <p class="leftalign" id="DisplayEnemyHP"></p>
         <p class="leftalign" id="DisplayHeroHP"></p>
         <p class="leftalign" id="DisplayEnemyDamage"></p>
-        <p class="leftalign" id="DisplayHeroDamage"></p>
+        <p class="leftalign" id="DisplayBaseDamage"></p>
         <p class="leftalign" id="DisplayGold"></p>
         <p class="leftalign" id="DisplayDead"></p>
         <p class="leftalign" id="Weapon"></p>
+        <p class="leftalign" id="WeakResist"></p>
         <br />
 
 
-
-        <!--Beginning profile images
-        Each one corresponds to a unit. Clicking it gains said unit-->
-        <div class="row">
-            <!--First profile image-->
-            <div class="col-sm-4 unit" onclick="getEnemyHP()">
-                <!--Name/title-->
-                <p class="text-center"><strong>Attack</strong></p>
-                <br />
-                <p class="text-center">ttak</p>
-                <br />
-                <!--Image-->
-                <img src="https://picsum.photos/255/255" class="img-circle person" alt="Random Name" width="255" height="255" draggable="false"/>
-            </div>
-
-            <div class="col-sm-4 unit" onclick="UpgradeAttack()">
-                <!--Name/title-->
-                <p class="text-center"><strong>Upgrade</strong></p>
-                <br />
-                <p class="text-center" id="UpgradeCost">Costs</p>
-                <br />
-                <!--Image-->
-                <img src="https://picsum.photos/255/255" class="img-circle person" alt="Random Name" width="255" height="255" draggable="false"/>
-            </div>
-
-                        <!--First profile image-->
-            <div class="col-sm-4 unit" onclick="ResetValues()">
-                <!--Name/title-->
-                <p class="text-center"><strong>reset</strong></p>
-                <br />
-                <p class="text-center">reset everything</p>
-                <br />
-                <!--Image-->
-                <img src="https://picsum.photos/255/255" class="img-circle person" alt="Random Name" width="255" height="255" draggable="false"/>
-            </div>
-        </div>
-
-        <div class="row">
-            <!--First profile image-->
-            <div class="col-sm-4 unit" onclick="NextEnemy()">
-                <!--Name/title-->
-                <p class="text-center"><strong>Next Enemy</strong></p>
-                <br />
-                <p class="text-center"></p>
-                <br />
-                <!--Image-->
-                <img src="https://picsum.photos/255/255" class="img-circle person" alt="Random Name" width="255" height="255" draggable="false"/>
-            </div>
-                        <!--First profile image-->
-            <div class="col-sm-4 unit" onclick="LastEnemy()">
-                <!--Name/title-->
-                <p class="text-center"><strong>Last Enemy</strong></p>
-                <br />
-                <p class="text-center"></p>
-                <br />
-                <!--Image-->
-                <img src="https://picsum.photos/255/255" class="img-circle person" alt="Random Name" width="255" height="255" draggable="false"/>
-            </div>
-        </div>
+        <table style="width:100%;table-layout: fixed;">
+            <tr>
+                <td> <button id="UpgradeCost" style="width:100%;background-color:black;" onclick="UpgradeAttack()"> Upgrade attack</button>  </td>
+                <td> <button style="width:100%;background-color:black;" onclick="ResetValues()"> Reset</button> </td>
+            </tr>
+            <tr>
+                <td> <button style="width:100%;background-color:black;" onclick="NextEnemy()"> Next enemy</button> </td>
+                <td> <button style="width:100%;background-color:black;" onclick="LastEnemy()"> Previous enemy</button> </td>
+            </tr>
+        </table>
 
         <table id="ShopTable" style="width:100%">
         </table>
+
         <table style="width:100%;">
             <tr>
                 <td onclick="ShopPageFirst()"></td>
-                <td> <button style="width:100%;" onclick="ShopPagePrev()"> <-- </button> </td>
+                <td> <button style="width:100%;background-color:black;" onclick="ShopPagePrev()"> <-- </button> </td>
                 <td  style="border: 1px solid black;width:10%" id="ShopPage"></td>
-                <td> <button style="width:100%;" onclick="ShopPageNext()"> --> </button> </td>
+                <td> <button style="width:100%;background-color:black;" onclick="ShopPageNext()"> --> </button> </td>
                 <td onclick="ShopPageLast()"></td>
             </tr>
         </table>
@@ -118,17 +71,5 @@
     
 </body>
 
-<style>
-.ShopTableCells {
-    border: 1px solid black;height:35px;
-}
-.ShopTableHeader {
-    border: 1px solid black;height:35px;color:black;
-}
-.ShopTableOwned{
-    border: 1px solid black;height:35px;color:white; background-color: grey;padding:0px 5px;
-}
-
-</style>
 <script src="script.js"></script>
 </html>

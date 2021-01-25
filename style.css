@@ -1,18 +1,15 @@
-html {
-  -webkit-filter: grayscale(100%);
-  -moz-filter: grayscale(100%);
-  filter: grayscale(100%);
-}
+
 body {
   font: 400 15px/1.8 Lato, sans-serif;
-  color: #777;
+  color: rgb(255, 255, 255);
+  background-color:rgb(80, 80, 80);
 }
 h3,
 h4 {
   margin: 10px 0 30px 0;
   letter-spacing: 10px;
   font-size: 20px;
-  color: #111;
+  color: rgb(255, 255, 255);
 }
 .container {
   padding: 80px 120px;
@@ -192,4 +189,21 @@ textarea {
 
 .unit {
   cursor: pointer;
+}
+
+.ShopTableCells {
+  border: 1px solid black;height:35px;color:black; background-color:rgb(88, 94, 122);
+}
+.ShopTableHeader {
+  border: 1px solid black;height:35px;color:black;
+  table-layout: fixed;
+  width: 100px;
+}
+.ShopTableSmall {
+  border: 1px solid black;height:35px;color:black;
+  table-layout: fixed;
+  width: 50px;
+}
+.ShopTableOwned{
+  border: 1px solid black;height:35px;color:rgb(255, 255, 255); background-color:rgb(22, 22, 43);padding:0px 5px; font-family:Arial;
 }

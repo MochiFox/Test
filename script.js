@@ -1,4 +1,19 @@
+/*##########################################################
+  _____ ___  ____   ___    _     ___ ____ _____ 
+ |_   _/ _ \|  _ \ / _ \  | |   |_ _/ ___|_   _|
+   | || | | | | | | | | | | |    | |\___ \ | |  
+   | || |_| | |_| | |_| | | |___ | | ___) || |  
+   |_| \___/|____/ \___/  |_____|___|____/ |_|  
+                                                
+    -Enemy Drops
+    -Crafting/Cooking/Alchemy
+    -Weapons list
+    -Enemy list
+    -Enemy drops
+    -Crit calculations
 
+
+##########################################################*/
 var EnemyHealth = 10;
 var EnemyDamage = 5;
 var EnemyNumber = 0;
@@ -7,7 +22,7 @@ var Money = 200;
 var HeroExp = 0;
 var HeroMaxHealth = 100;
 var HeroHealth = 100;
-var HeroDamage = 5;
+var BaseDamage = 5;
 var ETime = 0;
 var PTime = 0;
 var paused = false;
@@ -17,56 +32,11 @@ var HeroSpeed = 20;
 var CurrentWeapon = 0;
 var CurrentPage = 0;
 var OwnedItems = [0];
-/*function get(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
-            // defensive check
-            if (typeof callback === "function") {
-                // apply() sets the meaning of "this" in the callback
-                callback.apply(xhr);
-            }
-        }
-    };
-    xhr.send();
-}
-// ----------------------------------------------------------------------------
+var FinalDamage = 0;
+var CritRate = 1;
+var DamageType = 'Physical';
+var DmgMultiplier = 1;
 
-
-var finalUrl = "https://mochifox.github.io/Test/Enemies.json";
-var EnemyStats = [];
-// get() completes immediately...
-get(finalUrl,
-    // ...however, this callback is invoked AFTER the response arrives
-    function () {
-        // "this" is the XHR object here!
-        idk = this.responseText
-        //EnemyStats = JSON.parse(this.responseText);
-    }
-);
-alert(idk)
-
-
-function loadDoc() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        document.getElementById("TestTxt").innerHTML  return this.responseText;
-      }
-    };
-    xhttp.open("GET", "https://mochifox.github.io/Test/Enemies.json", true);
-    xhttp.send();
-    return xhttp.responseText;
-  }
-
-function DisplayText(Txt) {
-    document.getElementById("TestTxt").innerHTML = Txt;
-}
-loadDoc()
-DisplayText(loadDoc());
-let EnemyStats = JSON.parse(idk);
-*/
 function DisplayText(Txt) {
     document.getElementById("TestTxt").innerHTML = Txt;
 }
@@ -83,7 +53,7 @@ $(document).ready(function () {
         EnemyMaxHealth = units['EnemyMaxHealth'];
         HeroMaxHealth = units['HeroMaxHealth'];       
         HeroHealth = units['HeroHealth'];
-        HeroDamage = units['HeroDamage'];
+        BaseDamage = units['BaseDamage'];
         Money = units['Money'];
         EnemyDamage = units['EnemyDamage'];
         EnemySpeed = units['EnemySpeed'];
@@ -97,14 +67,13 @@ $(document).ready(function () {
         //set each unit
         showUpdate();
         getUpdate();
-        HeroDamage = AttackLevel;
         window.localStorage.setItem(
             'units', JSON.stringify({
                 'EnemyHealth': EnemyHealth,
                 'EnemyMaxHealth': EnemyMaxHealth,
                 'HeroMaxHealth': HeroMaxHealth,
                 'HeroHealth': HeroHealth,
-                'HeroDamage': HeroDamage,
+                'BaseDamage': BaseDamage,
                 'HeroSpeed': HeroSpeed,
                 'Money': Money,
                 'EnemyDamage': EnemyDamage,
@@ -123,10 +92,10 @@ function showUpdate() {
     document.getElementById("DisplayEnemyHP").innerHTML = EnemyStats[EnemyNumber].Name +" HP: " + EnemyHealth + "/" + EnemyMaxHealth;
     document.getElementById("DisplayHeroHP").innerHTML = "HP: " + HeroHealth + "/" + HeroMaxHealth;
     document.getElementById("DisplayEnemyDamage").innerHTML = "The enemy is dealing " + EnemyDamage + ' damage every ' + EnemySpeed/10 + ' seconds';
-    document.getElementById("DisplayHeroDamage").innerHTML = "Level: " + AttackLevel + " You are dealing " + (HeroDamage + ItemStats[CurrentWeapon].Damage) + ' damage every ' + HeroSpeed/10 + ' seconds';
+    document.getElementById("DisplayBaseDamage").innerHTML = "Level: " + AttackLevel + " You are dealing " + FinalDamage + ' damage every ' + HeroSpeed/10 + ' seconds';
     document.getElementById("DisplayGold").innerHTML = "Gold: " + Money ;
-    document.getElementById("UpgradeCost").innerHTML = "Costs: " + AttackLevel * 2 ;
-    document.getElementById("Weapon").innerHTML = "Current Weapon: " + ItemStats[CurrentWeapon].Name + " is adding " + ItemStats[CurrentWeapon].Damage + " damage";
+    document.getElementById("UpgradeCost").innerHTML = "Upgrade attack for: " + AttackLevel * 25 ;
+    document.getElementById("Weapon").innerHTML = "Current Weapon: " + ItemStats[CurrentWeapon].Name + " is dealing " + ItemStats[CurrentWeapon].Damage + ' ' + ItemStats[CurrentWeapon].Element.toLowerCase() + " damage";
     if (paused == false) {
         document.getElementById("DisplayDead").innerHTML = "";
     }
@@ -135,20 +104,6 @@ function showUpdate() {
     }
 
 
-}
-//functions for the units
-//a is one more for each click
-function getEnemyHP() {
-    if (paused == false) {
-        EnemyHealth = EnemyHealth - (HeroDamage + ItemStats[CurrentWeapon].Damage);
-        if (EnemyHealth <= 0) {
-            Money = Money + 5;
-            ETime = 0;
-            PTime = 0;
-            EnemyHealth = EnemyMaxHealth;
-        }
-    }
-    showUpdate();
 }
 
 function NextEnemy() {
@@ -182,17 +137,22 @@ function LastEnemy() {
 }
 
 function UpgradeAttack() {
-    if (Money >= AttackLevel * 2) {
+    if (Money >= AttackLevel * 25) {
         Money = Money - AttackLevel * 25;
         AttackLevel = AttackLevel + 1
+        
     }
 }
+
 function getUpdate() {
+    BaseDamage = AttackLevel;
+    //Check if it's time for the enemy to attack
     if (ETime >= EnemySpeed) {
         ETime = 0;
         HeroHealth = HeroHealth - EnemyDamage;
     }
 
+    //Check if the enemy is dead
     if (EnemyHealth <= 0) {
         Money = Money + 5;
         ETime = 0;
@@ -200,15 +160,21 @@ function getUpdate() {
         EnemyHealth = EnemyMaxHealth;
     }
 
+    //Calculate final attack damage
+    CalcFinalDamage();
+
+    //Check if its time for players auto-attack
     if (PTime >= HeroSpeed) {
         PTime = 0;
-        EnemyHealth = EnemyHealth - (ItemStats[CurrentWeapon].Damage + HeroDamage);
+        EnemyHealth = EnemyHealth - FinalDamage;
     }
 
+    //Regen health if paused
     if (paused == true) {
         HeroHealth = HeroHealth + HeroMaxHealth/20;
     }
     
+    //Handle player death
     if (HeroHealth <= 0) {
         ETime = 0;
         PTime = 0;
@@ -216,9 +182,12 @@ function getUpdate() {
         paused = true;
     }
 
+    //Unpause after regen to full
     if (HeroHealth == HeroMaxHealth) {
         paused = false;
     }
+
+    //Increment countdowns
     if (paused == false) {
         ETime = ETime + 1
     }
@@ -228,6 +197,21 @@ function getUpdate() {
 
 }
 
+function CalcFinalDamage() {
+    if (EnemyStats[EnemyNumber].Weak.includes(ItemStats[CurrentWeapon].Element)) {
+        document.getElementById("WeakResist").innerHTML = 'The enemy is weak to ' + ItemStats[CurrentWeapon].Element.toLowerCase() + " damage, resulting in 1.5x damage";
+        DmgMultiplier = 1.5;
+    }
+    else if (EnemyStats[EnemyNumber].Resist.includes(ItemStats[CurrentWeapon].Element)) {
+        document.getElementById("WeakResist").innerHTML = 'The enemy is resistant to ' + ItemStats[CurrentWeapon].Element.toLowerCase() + " damage resulting in 0.5x damage";
+        DmgMultiplier = 0.5;
+    }
+    else {
+        document.getElementById("WeakResist").innerHTML = 'The enemy is neutral to ' + ItemStats[CurrentWeapon].Element.toLowerCase() + " damage resulting in 1x damage";
+        DmgMultiplier = 1;
+    }
+    FinalDamage = (ItemStats[CurrentWeapon].Damage * DmgMultiplier + BaseDamage)
+}
 function InitialiseEnemy(ID) {
     EnemyMaxHealth = EnemyStats[ID].Health;
     EnemyHealth = EnemyMaxHealth;
@@ -237,57 +221,39 @@ function InitialiseEnemy(ID) {
 
 function InitialiseConstants() {
     EnemyStats = [
-        {Name:"Goblin", Health:10, Damage:5, EXP:1, Gold:5, Speed:10},
-        {Name:"Gnoblin", Health:15, Damage:16, EXP:3, Gold:10, Speed:15},
-        {Name:"Gnomlin", Health:60, Damage:20, EXP:10, Gold:25, Speed:40},
-        {Name:"Gromlin", Health:20, Damage:2, EXP:25, Gold:45, Speed:1},
-        {Name:"Gremlin", Health:80, Damage:20, EXP:30, Gold:50, Speed:10},
-        {Name:"a", Health:99, Damage:9, EXP:9, Gold:9, Speed:9}
+        {Name:"Goblin", Health:10, Damage:5, EXP:1, Gold:5, Speed:10, Weak:['Fire', 'Wind'], Resist:['Elec']},
+        {Name:"Gnoblin", Health:15, Damage:16, EXP:3, Gold:10, Speed:15, Weak:['Ice'], Resist:['Elec', 'Fire']},
+        {Name:"Gnomlin", Health:60, Damage:20, EXP:10, Gold:25, Speed:40, Weak:['Fire', 'Ice', 'Wind'], Resist:['Elec', 'Physical']},
+        {Name:"Gromlin", Health:20, Damage:2, EXP:25, Gold:45, Speed:1, Weak:['Fire', 'Ice', 'Wind'], Resist:['Elec']},
+        {Name:"Gremlin", Health:80, Damage:20, EXP:30, Gold:50, Speed:10, Weak:['Fire', 'Ice', 'Wind'], Resist:['Elec']},
+        {Name:"a", Health:99, Damage:9, EXP:9, Gold:9, Speed:9, Weak:['Fire', 'Ice', 'Wind'], Resist:['Elec']}
     ];
     ItemStats = [
-        {Name:"Practice Sword", Cost:5, Health:5, Damage:5, EXP:0, Gold:0, Speed:0.9},
-        {Name:"Wooden Shield", Cost:5, Health:25, Damage:1, EXP:0, Gold:0, Speed:1.1},
-        {Name:"Sharpened Practice Sword", Cost:10, Health:5, Damage:5, EXP:0, Gold:0, Speed:0.9},
-        {Name:"Reinforced Wooden Shield", Cost:10, Health:25, Damage:1, EXP:0, Gold:0, Speed:1.1},
-        {Name:"Sword", Cost:20, Health:5, Damage:5, EXP:0, Gold:0, Speed:0.9},
-        {Name:"Shield", Cost:20, Health:25, Damage:1, EXP:0, Gold:0, Speed:1.1},
-        {Name:"Practice Sword", Cost:5, Health:5, Damage:5, EXP:0, Gold:0, Speed:0.9},
-        {Name:"Wooddeld", Cost:5, Health:25, Damage:1, EXP:0, Gold:0, Speed:1.1},
-        {Name:"Sharpenedd", Cost:10, Health:5, Damage:5, EXP:0, Gold:0, Speed:0.9},
-        {Name:"Reiaed Wooden Shield", Cost:10, Health:25, Damage:1, EXP:0, Gold:0, Speed:1.1},
-        {Name:"Swoad", Cost:20, Health:5, Damage:5, EXP:0, Gold:0, Speed:0.9},
-        {Name:"Shdld", Cost:20, Health:25, Damage:1, EXP:0, Gold:0, Speed:1.1}
+        {Name:"Practice Sword", ImageID:"PracSword.png", Cost:5, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
+        {Name:"Wooden Shield", Cost:5, ImageID:"WoodShield.png", Health:25, Damage:1, Element:'Fire', Gold:0, Speed:1.1},
+        {Name:"Sharpened Practice Sword", ImageID:"PracSword.png", Cost:10, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
+        {Name:"Reinforced Wooden Shield", ImageID:"PracSword.png", Cost:10, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1},
+        {Name:"Sword", ImageID:"PracSword.png", Cost:20, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
+        {Name:"Shield", ImageID:"PracSword.png", Cost:20, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1},
+        {Name:"Practice Sword", ImageID:"PracSword.png", Cost:5, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
+        {Name:"Wooddeld", ImageID:"PracSword.png", Cost:5, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1},
+        {Name:"Sharpenedd", ImageID:"PracSword.png", Cost:10, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
+        {Name:"Reiaed Wooden Shield", ImageID:"PracSword.png", Cost:10, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1},
+        {Name:"Swoad", ImageID:"PracSword.png", Cost:20, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
+        {Name:"Shdld", ImageID:"PracSword.png", Cost:20, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1}
     ];
     
     CurrentPage = 0;
 
     InitialiseEnemy(EnemyNumber)
+    UpdateShop();
     showUpdate();
 }
 
 function UpdateShop() {
-    CreateCustomTable(7, 4, 'ShopTable', ShopRowFunction);
+    CreateCustomTable(7, 5, 'ShopTable', ShopRowFunction);
     document.getElementById("ShopPage").innerHTML = "<b>" + CurrentPage + "</b>" ;
-    /*document.getElementById("ShopPage").innerHTML = "Page: " + (CurrentPage + 1);
-    for (i = 0; i < 5; i++) {
-        if ((CurrentPage * 4 + i) < ItemStats.length) {
-            document.getElementById("ShopName" + i).innerHTML = ItemStats[CurrentPage * 4 + i].Name ;
-            document.getElementById("ShopPrice" + i).innerHTML = ItemStats[CurrentPage * 4 + i].Cost ;
-            document.getElementById("ShopStats" + i).innerHTML = ItemStats[CurrentPage * 4 + i].Damage ;
-            if ((CurrentPage * 4 + i) == CurrentWeapon) {
-                document.getElementById("ShopBuy" + i).innerHTML = ' <button> OWNED </button> ' ;
-            }
-            else {
-                document.getElementById("ShopBuy" + i).innerHTML = ' <button onclick="BuyItem(' + i + ')"> BUY </button> ' ;
-            }
-        }
-        else {
-            document.getElementById("ShopName" + i).innerHTML = "Coming Soon" ;
-            document.getElementById("ShopPrice" + i).innerHTML = '' ;
-            document.getElementById("ShopStats" + i).innerHTML = '' ;
-            document.getElementById("ShopBuy" + i).innerHTML = '' ;
-        }
-    }*/
+
 }
 UpdateShop();
 
@@ -308,8 +274,13 @@ function CreateCustomTable(Rows, Columns, ID, RowFunction) {
 
 function ShopRowFunction(TableRow, Column) {
     if (TableRow == 0) {
-        Header = ['<b> Name </b>', "<b> Cost </b>", '<b> Damage </b>', '<b style="width:100%"> BUY </b>'];
-        style = 'ShopTableHeader';
+        Header = ['', '<b> Name </b>', "<b> Cost </b>", '<b> Damage </b>', '<b style="width:100%"> Buy </b>'];
+        if ((Column == 0 || Column == 2) || Column == 3) {
+            style = 'ShopTableSmall';
+        }
+        else {
+            style = 'ShopTableHeader';
+        }
         return [Header[Column], style];
     }
     else {
@@ -328,7 +299,7 @@ function ShopRowFunction(TableRow, Column) {
         }
 
         if (ItemNumber < ItemStats.length) {
-            Item = [ItemStats[ItemNumber].Name, ItemStats[ItemNumber].Cost, ItemStats[ItemNumber].Damage, PurchaseButton];
+            Item = ["<img src='https://mochifox.github.io/Test/Assets/" + ItemStats[ItemNumber].ImageID + "'>", ItemStats[ItemNumber].Name, ItemStats[ItemNumber].Cost, ItemStats[ItemNumber].Damage, PurchaseButton];
         }
         else {
             return ['‎',style]
@@ -378,7 +349,7 @@ function ResetValues() {
     HeroExp = 0;
     HeroMaxHealth = 100;
     HeroHealth = 100;
-    HeroDamage = 1;
+    BaseDamage = 1;
     ETime = 0;
     PTime = 0;
     paused = false;
