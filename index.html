@@ -26,15 +26,36 @@
     <div class="container text-center">
         <div id="TestTxt"></div>
         <h3>Units</h3>
-        <p class="leftalign" id="DisplayEnemyHP"></p>
-        <p class="leftalign" id="DisplayHeroHP"></p>
-        <p class="leftalign" id="DisplayEnemyDamage"></p>
-        <p class="leftalign" id="DisplayBaseDamage"></p>
-        <p class="leftalign" id="DisplayGold"></p>
+
+        <table style="width:100%;table-layout: fixed;">
+            <tr>
+                <td><p class="leftalign" id="DisplayHeroHP"></p></td>
+                <td><p class="leftalign" id="DisplayEnemyHP"></p></td>
+            </tr>
+            <tr>
+                <td><p class="leftalign" id="DisplayBaseDamage"></p></td>
+                <td><p class="leftalign" id="DisplayEnemyDamage"></p></td>
+            </tr>
+            <tr>
+                <td><p class="leftalign" id="DisplayGold"></p></td>
+                <td><p class="leftalign" id="WeakResist"></p></td>
+            </tr>
+            <tr>
+                <td><p class="leftalign" id="Weapon"></p></td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+        </table>
         <p class="leftalign" id="DisplayDead"></p>
-        <p class="leftalign" id="Weapon"></p>
-        <p class="leftalign" id="WeakResist"></p>
+        <p class="leftalign" id="CombatLog"></p>
+        <p class="leftalign" id="Stats"></p>
+        <button style="width:25%;background-color:rgb(117, 117, 117);" onclick="ToggleStats()"> Toggle stats</button>
         <br />
+
 
 
         <table style="width:100%;table-layout: fixed;">
@@ -66,7 +87,7 @@
         <p>Mochi Box</p>
     </footer>
 
-    <button type="button" onclick="CreateCustomTable(3, 4, 'CustomTable', ShopRowFunction)">Try it</button>
+    <button type="button" onclick="UpdateLog('a')">Try it</button>
 
     
 </body>

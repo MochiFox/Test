@@ -33,9 +33,11 @@ var CurrentWeapon = 0;
 var CurrentPage = 0;
 var OwnedItems = [0];
 var FinalDamage = 0;
-var CritRate = 1;
+var CritRate = 0.5;
 var DamageType = 'Physical';
 var DmgMultiplier = 1;
+var CritDamage = 2;
+var ShowStats = false;
 
 function DisplayText(Txt) {
     document.getElementById("TestTxt").innerHTML = Txt;
@@ -97,7 +99,7 @@ function showUpdate() {
     document.getElementById("UpgradeCost").innerHTML = "Upgrade attack for: " + AttackLevel * 25 ;
     document.getElementById("Weapon").innerHTML = "Current Weapon: " + ItemStats[CurrentWeapon].Name + " is dealing " + ItemStats[CurrentWeapon].Damage + ' ' + ItemStats[CurrentWeapon].Element.toLowerCase() + " damage";
     if (paused == false) {
-        document.getElementById("DisplayDead").innerHTML = "";
+        document.getElementById("DisplayDead").innerHTML = " ";
     }
     else {
         document.getElementById("DisplayDead").innerHTML = "*You are dead* Please wait a moment";
@@ -150,6 +152,7 @@ function getUpdate() {
     if (ETime >= EnemySpeed) {
         ETime = 0;
         HeroHealth = HeroHealth - EnemyDamage;
+        UpdateLog('You took ' + EnemyDamage + " damage.")
     }
 
     //Check if the enemy is dead
@@ -158,15 +161,26 @@ function getUpdate() {
         ETime = 0;
         PTime = 0;
         EnemyHealth = EnemyMaxHealth;
+        UpdateLog(EnemyStats[EnemyNumber].Name + " has died")
     }
 
     //Calculate final attack damage
     CalcFinalDamage();
 
+    DisplayStats(ShowStats);
+
     //Check if its time for players auto-attack
     if (PTime >= HeroSpeed) {
         PTime = 0;
-        EnemyHealth = EnemyHealth - FinalDamage;
+        if (Math.floor(Math.random() * 100) <= CritRate* 100) {
+            FinalDamage = FinalDamage * CritDamage;
+            EnemyHealth = EnemyHealth - FinalDamage;
+            UpdateLog('You attacked for ' + FinalDamage + " damage with a devastating critical!")
+        }
+        else {
+            EnemyHealth = EnemyHealth - FinalDamage;
+            UpdateLog('You attacked for ' + FinalDamage + " damage.")
+        }
     }
 
     //Regen health if paused
@@ -180,6 +194,7 @@ function getUpdate() {
         PTime = 0;
         HeroHealth = 0;
         paused = true;
+        UpdateLog('You have fallen, please wait until your health has regenerated')
     }
 
     //Unpause after regen to full
@@ -195,6 +210,21 @@ function getUpdate() {
         PTime = PTime + 1
     }
 
+}
+
+var CombatLog = ['‏‏‎ ‎','‏‏‎ ‎','‏‏‎ ‎'];
+function UpdateLog(NewLine) {
+    CombatLog.push(NewLine);
+    if (CombatLog.length == 4) {
+        CombatLog.shift();
+    }
+    log = '';
+    colors = ['black', 'gray', 'white'];
+    for (i = 0; i < CombatLog.length; i++) {
+        log += '<p style="color:' + colors[i] + ';">' + CombatLog[i] + '<p>';
+    }
+        
+    document.getElementById("CombatLog").innerHTML = log;
 }
 
 function CalcFinalDamage() {
@@ -338,6 +368,24 @@ function ShopPagePrev() {
         CurrentPage = CurrentPage - 1;
     }
     UpdateShop();
+}
+
+function DisplayStats(Toggle) {
+    stats = [HeroMaxHealth, BaseDamage, AttackLevel, HeroSpeed, CritRate, CritDamage];
+    text = ['Max health: ',  'Base damage: ', 'Level: ', 'Attack speed: ', 'Critical hit chance: ', 'Critical multiplier: '];
+    if (Toggle == true) {
+        StatsText = '';
+        for (i = 0; i < stats.length; i++) {
+            StatsText += text[i] + ' ' + stats[i] + '<br>';
+        }
+    }
+    else {
+        StatsText = ''
+    }
+    document.getElementById("Stats").innerHTML = StatsText;
+}
+function ToggleStats () {
+    ShowStats = !ShowStats;
 }
 
 function ResetValues() {
