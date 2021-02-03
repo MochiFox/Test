@@ -430,6 +430,7 @@ function ToggleStats () {
 }
 
 function ResetValues() {
+    localStorage.clear();
     InitialiseEnemy(EnemyNumber)
     CurrentWeapon = 0;
     EnemyNumber = 0;
