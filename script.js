@@ -11,15 +11,16 @@
     -Enemy list
     -Enemy drops
     -Crit calculations
-
+    -Weapon mastery
 
 ##########################################################*/
+
 var EnemyHealth = 10;
 var EnemyDamage = 5;
 var EnemyNumber = 0;
 var EnemySpeed = 3;
 var Money = 200;
-var HeroExp = 0;
+var HeroEXP = 0;
 var HeroMaxHealth = 100;
 var HeroHealth = 100;
 var BaseDamage = 5;
@@ -35,6 +36,7 @@ var OwnedItems = [0];
 var FinalDamage = 0;
 var CritRate = 0.5;
 var DamageType = 'Physical';
+var WeaponType = 'Sword';
 var DmgMultiplier = 1;
 var CritDamage = 2;
 var ShowStats = false;
@@ -42,8 +44,13 @@ var ShowStats = false;
 function DisplayText(Txt) {
     document.getElementById("TestTxt").innerHTML = Txt;
 }
-let EnemyStats = [];
-let ItemStats = [];
+
+var EnemyStats = [];
+var ItemStats = [];
+var EXPShopDetails = [];
+var BoughtStats = [1,1];
+var WeaponXP = [0,0,0];
+var WeaponLevelDetails = [];
 InitialiseConstants();
 
 $(document).ready(function () {
@@ -54,15 +61,16 @@ $(document).ready(function () {
         EnemyHealth = units['EnemyHealth'];
         EnemyMaxHealth = units['EnemyMaxHealth'];
         HeroMaxHealth = units['HeroMaxHealth'];       
-        HeroHealth = units['HeroHealth'];
         BaseDamage = units['BaseDamage'];
         Money = units['Money'];
-        EnemyDamage = units['EnemyDamage'];
-        EnemySpeed = units['EnemySpeed'];
-        ETime = units['ETime'];
-        OwnedItems = units['OwnedItems']
+        OwnedItems = units['OwnedItems'];
+        HeroEXP = units['HeroEXP'];
+        AttackLevel = units['AttackLevel'];
+        BoughtStats = units['BoughtStats'];
+        HeroEXP = units['HeroEXP']
     }
-    UpdateShop();
+    UpdateShops();
+    UpdateEXPShop()
     showUpdate();
     //each second
     window.setInterval(function () {
@@ -74,17 +82,12 @@ $(document).ready(function () {
                 'EnemyHealth': EnemyHealth,
                 'EnemyMaxHealth': EnemyMaxHealth,
                 'HeroMaxHealth': HeroMaxHealth,
-                'HeroHealth': HeroHealth,
                 'BaseDamage': BaseDamage,
-                'HeroSpeed': HeroSpeed,
                 'Money': Money,
-                'EnemyDamage': EnemyDamage,
-                'ETime': ETime,
-                'PTime': PTime,
-                'EnemySpeed': EnemySpeed,
-                'paused' : paused,
                 'AttackLevel': AttackLevel,
-                'OwnedItems': OwnedItems
+                'OwnedItems': OwnedItems,
+                'HeroEXP': HeroEXP,
+                'BoughtStats': BoughtStats
             })
         );
     }, 100);
@@ -95,14 +98,15 @@ function showUpdate() {
     document.getElementById("DisplayHeroHP").innerHTML = "HP: " + HeroHealth + "/" + HeroMaxHealth;
     document.getElementById("DisplayEnemyDamage").innerHTML = "The enemy is dealing " + EnemyDamage + ' damage every ' + EnemySpeed/10 + ' seconds';
     document.getElementById("DisplayBaseDamage").innerHTML = "Level: " + AttackLevel + " You are dealing " + FinalDamage + ' damage every ' + HeroSpeed/10 + ' seconds';
-    document.getElementById("DisplayGold").innerHTML = "Gold: " + Money ;
+    document.getElementById("DisplayGold").innerHTML = "Gold: " + Money;
+    document.getElementById("DisplayEXP").innerHTML = "Experience: " + HeroEXP;
     document.getElementById("UpgradeCost").innerHTML = "Upgrade attack for: " + AttackLevel * 25 ;
     document.getElementById("Weapon").innerHTML = "Current Weapon: " + ItemStats[CurrentWeapon].Name + " is dealing " + ItemStats[CurrentWeapon].Damage + ' ' + ItemStats[CurrentWeapon].Element.toLowerCase() + " damage";
     if (paused == false) {
-        document.getElementById("DisplayDead").innerHTML = " ";
+        document.getElementById("DisplayDead").innerHTML = "<br>";
     }
     else {
-        document.getElementById("DisplayDead").innerHTML = "*You are dead* Please wait a moment";
+        document.getElementById("DisplayDead").innerHTML = "<b> You are dead! </b> Please wait a moment";
     }
 
 
@@ -155,14 +159,7 @@ function getUpdate() {
         UpdateLog('You took ' + EnemyDamage + " damage.")
     }
 
-    //Check if the enemy is dead
-    if (EnemyHealth <= 0) {
-        Money = Money + 5;
-        ETime = 0;
-        PTime = 0;
-        EnemyHealth = EnemyMaxHealth;
-        UpdateLog(EnemyStats[EnemyNumber].Name + " has died")
-    }
+
 
     //Calculate final attack damage
     CalcFinalDamage();
@@ -173,14 +170,23 @@ function getUpdate() {
     if (PTime >= HeroSpeed) {
         PTime = 0;
         if (Math.floor(Math.random() * 100) <= CritRate* 100) {
-            FinalDamage = FinalDamage * CritDamage;
-            EnemyHealth = EnemyHealth - FinalDamage;
-            UpdateLog('You attacked for ' + FinalDamage + " damage with a devastating critical!")
+            EnemyHealth = EnemyHealth - FinalDamage * CritDamage;
+            UpdateLog('You attacked for ' + FinalDamage * CritDamage + ' damage with a <span style="color:red"> devastating critical! </span>' )
         }
         else {
             EnemyHealth = EnemyHealth - FinalDamage;
             UpdateLog('You attacked for ' + FinalDamage + " damage.")
         }
+    }
+
+    //Check if the enemy is dead
+    if (EnemyHealth <= 0) {
+        Money += EnemyStats[EnemyNumber].Gold;
+        HeroEXP += EnemyStats[EnemyNumber].EXP;
+        ETime = 0;
+        PTime = 0;
+        EnemyHealth = EnemyMaxHealth;
+        UpdateLog(EnemyStats[EnemyNumber].Name + " has died, you gained " + EnemyStats[EnemyNumber].EXP + " exp and " + EnemyStats[EnemyNumber].Gold + ' gold')
     }
 
     //Regen health if paused
@@ -240,7 +246,7 @@ function CalcFinalDamage() {
         document.getElementById("WeakResist").innerHTML = 'The enemy is neutral to ' + ItemStats[CurrentWeapon].Element.toLowerCase() + " damage resulting in 1x damage";
         DmgMultiplier = 1;
     }
-    FinalDamage = (ItemStats[CurrentWeapon].Damage * DmgMultiplier + BaseDamage)
+    FinalDamage = ((ItemStats[CurrentWeapon].Damage + BaseDamage + BoughtStats[0]) * DmgMultiplier)
 }
 function InitialiseEnemy(ID) {
     EnemyMaxHealth = EnemyStats[ID].Health;
@@ -259,33 +265,66 @@ function InitialiseConstants() {
         {Name:"a", Health:99, Damage:9, EXP:9, Gold:9, Speed:9, Weak:['Fire', 'Ice', 'Wind'], Resist:['Elec']}
     ];
     ItemStats = [
-        {Name:"Practice Sword", ImageID:"PracSword.png", Cost:5, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
-        {Name:"Wooden Shield", Cost:5, ImageID:"WoodShield.png", Health:25, Damage:1, Element:'Fire', Gold:0, Speed:1.1},
-        {Name:"Sharpened Practice Sword", ImageID:"PracSword.png", Cost:10, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
-        {Name:"Reinforced Wooden Shield", ImageID:"PracSword.png", Cost:10, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1},
-        {Name:"Sword", ImageID:"PracSword.png", Cost:20, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
-        {Name:"Shield", ImageID:"PracSword.png", Cost:20, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1},
-        {Name:"Practice Sword", ImageID:"PracSword.png", Cost:5, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
-        {Name:"Wooddeld", ImageID:"PracSword.png", Cost:5, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1},
-        {Name:"Sharpenedd", ImageID:"PracSword.png", Cost:10, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
-        {Name:"Reiaed Wooden Shield", ImageID:"PracSword.png", Cost:10, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1},
-        {Name:"Swoad", ImageID:"PracSword.png", Cost:20, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9},
-        {Name:"Shdld", ImageID:"PracSword.png", Cost:20, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1}
+        {Name:"Practice Sword", ImageID:"PracSword.png", Cost:5, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9, type:'Sword'},
+        {Name:"Wooden Shield", Cost:5, ImageID:"WoodShield.png", Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1, type:'Shield'},
+        {Name:"Bow", ImageID:"PracSword.png", Cost:10, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9, type:'Bow'},
+        {Name:"Staff", ImageID:"PracSword.png", Cost:10, Health:25, Damage:1, Element:'Fire', Gold:0, Speed:1.1, type:'Staff'},
+        {Name:"Sword", ImageID:"PracSword.png", Cost:20, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9, type:'Shield'},
+        {Name:"Shield", ImageID:"PracSword.png", Cost:20, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1, type:'Shield'},
+        {Name:"Practice Sword", ImageID:"PracSword.png", Cost:5, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9, type:'Shield'},
+        {Name:"Wooddeld", ImageID:"PracSword.png", Cost:5, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1, type:'Shield'},
+        {Name:"Sharpenedd", ImageID:"PracSword.png", Cost:10, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9, type:'Shield'},
+        {Name:"Reiaed Wooden Shield", ImageID:"PracSword.png", Cost:10, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1, type:'Shield'},
+        {Name:"Swoad", ImageID:"PracSword.png", Cost:20, Health:5, Damage:5, Element:'Physical', Gold:0, Speed:0.9, type:'Shield'},
+        {Name:"Shdld", ImageID:"PracSword.png", Cost:20, Health:25, Damage:1, Element:'Physical', Gold:0, Speed:1.1, type:'Shield'}
     ];
     
+    EXPShopDetails = [
+        {Skill:"Damage",Scale:function(lvl) {return lvl * 25},Description:"+1 Base Damage",Effect:function(lvl) {return ('+' + (lvl - 1) + ' Base Damage')}},
+        {Skill:"Health",Scale:function(lvl) {return lvl * 10},Description:"+1 HP",Effect:function(lvl) {return ('+' + (lvl - 1) + ' HP')}}
+    ];
+
+    WeaponLevelDetails = [
+        //Upgrades at level 1,2,3,4,5,7,9,12,15,20,25,30,35,40,50,60,70,80,90,100
+        //levels 20, 50 and 100 add new mechanics
+        //lvl 20 sword = chance to deal critical damage, lvl 50 = sword crits weaken enemy, lvl 100 = all weapons weaken enemy
+        //lvl 20 shield = chance to block damage, lvl 50 = shield has chance to stun enemy, lvl 100 = all weapons stun
+        //lvl 20 bow = chance to gain extra gold, lvl 50 = bows inflicts posion, lvl 100 = all weapons inflict poison
+        //lvl 20 staff = chance to gain a buff after a kill, lvl 50 = staff can choose element, lvl 100 = all (physical) weapons choose their element
+        //levels 2,5,12,20,30,40,60,80,100 add special bonuses
+        {SwordBonuses:[]}
+    ];
+
     CurrentPage = 0;
 
-    InitialiseEnemy(EnemyNumber)
-    UpdateShop();
+    InitialiseEnemy(EnemyNumber);
+    UpdateShops();
+    UpdateEXPShop();
     showUpdate();
 }
 
-function UpdateShop() {
-    CreateCustomTable(7, 5, 'ShopTable', ShopRowFunction);
-    document.getElementById("ShopPage").innerHTML = "<b>" + CurrentPage + "</b>" ;
+function getMasteryLevel(lvl){
+    levels = [1,2,3,4,5,7,9,12,15,20,25,30,35,40,50,60,70,80,90,100];
+    mastery = 0;
+    for (i=0; i < levels.length; i++){
+        if (lvl >= levels[i]){
+            mastery += 1;
+        }
+    }
+    return mastery
 
 }
-UpdateShop();
+function UpdateShops() {
+    CreateCustomTable(7, 5, 'ShopTable', ShopRowFunction);
+    document.getElementById("ShopPage").innerHTML = "<b>" + (CurrentPage + 1) + "</b>" ;
+
+}
+function UpdateEXPShop() {
+    CreateCustomTable(3, 6, 'ExpShopTable', EXPShopRowFunction);
+
+}
+UpdateShops();
+UpdateEXPShop()
 
 function CreateCustomTable(Rows, Columns, ID, RowFunction) {
     var table = document.getElementById(ID);
@@ -338,12 +377,13 @@ function ShopRowFunction(TableRow, Column) {
         return [Item[Column], style];
     }
 }
+
 function BuyItem(ItemNumber) {
     if (Money >= ItemStats[ItemNumber].Cost) {
         Money = Money - ItemStats[ItemNumber].Cost;
         OwnedItems.push(ItemNumber)
         CurrentWeapon = ItemNumber;
-        UpdateShop();
+        UpdateShops();
     }
     else {
         alert("Not enough money")
@@ -353,25 +393,26 @@ function BuyItem(ItemNumber) {
 
 function EquipItem(ItemNumber) {
     CurrentWeapon = ItemNumber;
-    UpdateShop();
+    UpdateShops();
 }
 
 function ShopPageNext() {
     if (CurrentPage <= 2) {
         CurrentPage = CurrentPage + 1;
     }
-    UpdateShop();
+    UpdateShops();
 }
 
 function ShopPagePrev() {
     if (CurrentPage > 0) {
         CurrentPage = CurrentPage - 1;
     }
-    UpdateShop();
+    UpdateShops();
 }
 
 function DisplayStats(Toggle) {
-    stats = [HeroMaxHealth, BaseDamage, AttackLevel, HeroSpeed, CritRate, CritDamage];
+    bonus = BoughtStats;
+    stats = [HeroMaxHealth + bonus[1], bonus[0], AttackLevel, HeroSpeed, CritRate, CritDamage];
     text = ['Max health: ',  'Base damage: ', 'Level: ', 'Attack speed: ', 'Critical hit chance: ', 'Critical multiplier: '];
     if (Toggle == true) {
         StatsText = '';
@@ -404,7 +445,46 @@ function ResetValues() {
     EnemyMaxHealth = 10;
     HeroSpeed = 20;
     OwnedItems = [0];
-    UpdateShop();
+    HeroEXP = 0;
+    BoughtStats = [1,1];
+    UpdateShops();
+    UpdateEXPShop()
     showUpdate();
 }
+
+function Debug() {
+    alert(getMasteryLevel(100));
+}
+
+function EXPShopRowFunction(TableRow, Column) {
+    if (TableRow == 0) {
+        Header = ['<b> Skill </b>', "<b> Cost </b>", '<b> Level <b>', '<b> Description </b>', '<b> Effect <b>', '<b> Buy? <b>'];
+        if (Column == 1) {
+            style = 'ShopTableSmall';
+        }
+        else {
+            style = 'ShopTableHeader';
+        }
+        return [Header[Column], style];
+    }
+    else {
+        stat = EXPShopDetails[(TableRow-1)];
+        style = 'ShopTableCells';
+        level = BoughtStats[(TableRow-1)];
+        purchaseSkill = ' <button onclick="BuySkill(' + (TableRow-1) + ')"> BUY </button> ' ;
+        Item = [stat.Skill,stat.Scale(level),level,stat.Description,stat.Effect(level),purchaseSkill];
+        return [Item[Column], style];
+    }
+}
+
+function BuySkill(skillNum) {
+    stat = EXPShopDetails[skillNum];
+    cost = stat.Scale(1);
+    if (HeroEXP >= cost) {
+        HeroEXP -= cost;
+        BoughtStats[skillNum] += 1;
+    }
+    UpdateEXPShop()
+}
+
 

@@ -41,6 +41,7 @@
                 <td><p class="leftalign" id="WeakResist"></p></td>
             </tr>
             <tr>
+                <td><p class="leftalign" id="DisplayEXP"></p></td>
                 <td><p class="leftalign" id="Weapon"></p></td>
             </tr>
             <tr>
@@ -50,8 +51,9 @@
                 <td></td>
             </tr>
         </table>
-        <p class="leftalign" id="DisplayDead"></p>
+
         <p class="leftalign" id="CombatLog"></p>
+        <p class="leftalign" id="DisplayDead"></p>
         <p class="leftalign" id="Stats"></p>
         <button style="width:25%;background-color:rgb(117, 117, 117);" onclick="ToggleStats()"> Toggle stats</button>
         <br />
@@ -72,6 +74,8 @@
         <table id="ShopTable" style="width:100%">
         </table>
 
+
+
         <table style="width:100%;">
             <tr>
                 <td onclick="ShopPageFirst()"></td>
@@ -81,16 +85,22 @@
                 <td onclick="ShopPageLast()"></td>
             </tr>
         </table>
+
+        <br>
+        <table id="ExpShopTable" style="width:100%">
+        </table>
     </div>
 
     <footer class="text-center">
         <p>Mochi Box</p>
     </footer>
 
-    <button type="button" onclick="UpdateLog('a')">Try it</button>
+    <button type="button" onclick="Debug()">Try it</button>
 
     
 </body>
 
-<script src="script.js"></script>
+<script type="text/javascript" src="break_infinity.js"></script>
+<script type="text/javascript" src="script.js"></script>
+
 </html>

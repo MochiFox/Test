@@ -1,6 +1,6 @@
 
 body {
-  font: 400 15px/1.8 Lato, sans-serif;
+  font: 400 14px/1.8 Lato, sans-serif;
   color: rgb(255, 255, 255);
   background-color:rgb(80, 80, 80);
 }
@@ -12,7 +12,7 @@ h4 {
   color: rgb(255, 255, 255);
 }
 .container {
-  padding: 80px 120px;
+  padding: 80px 40px;
 }
 .person {
   border: 10px solid transparent;
@@ -195,12 +195,12 @@ textarea {
   border: 1px solid black;height:35px;color:black; background-color:rgb(88, 94, 122);
 }
 .ShopTableHeader {
-  border: 1px solid black;height:35px;color:black;
+  border: 1px solid black;height:35px;color:black; background-color:rgb(121, 134, 187);
   table-layout: fixed;
   width: 100px;
 }
 .ShopTableSmall {
-  border: 1px solid black;height:35px;color:black;
+  border: 1px solid black;height:35px;color:black; background-color:rgb(121, 134, 187);
   table-layout: fixed;
   width: 50px;
 }
