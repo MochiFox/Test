@@ -14,18 +14,10 @@
 </head>
 
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <!--Logo/Name of site-->
-                <a class="navbar-brand" href="index.html">Mochi Clicker</a>
-            </div>
-        </div>
-    </nav>
 
     <div class="container text-center">
         <div id="TestTxt"></div>
-        <h3>Units</h3>
+        <h3>Mochi Incremental</h3>
 
         <table style="width:100%;table-layout: fixed;">
             <tr>
@@ -48,21 +40,24 @@
                 <td></td>
             </tr>
             <tr>
-                <td></td>
+                <td><p class="CombatLog" id="CombatLog"></p></td>
+                <td>Buffs List: <br><p class="leftalign" id="BuffsList"></p></td>
             </tr>
         </table>
-
-        <p class="leftalign" id="CombatLog"></p>
-        <p class="leftalign" id="DisplayDead"></p>
         <p class="leftalign" id="Stats"></p>
+        
+        <p class="leftalign" id="DisplayDead"></p>
+        
+        <p class="leftalign" id="Contributions"></p>
         <button style="width:25%;background-color:rgb(117, 117, 117);" onclick="ToggleStats()"> Toggle stats</button>
+        <button style="width:25%;background-color:rgb(117, 117, 117);" onclick="ToggleContr()"> Toggle damage breakdown</button>
         <br />
 
 
 
         <table style="width:100%;table-layout: fixed;">
             <tr>
-                <td> <button style="width:100%;background-color:black;" onclick="ResetValues()"> Reset</button> </td>
+                <td></td>
             </tr>
             <tr>
                 <td> <button style="width:100%;background-color:black;" onclick="NextEnemy()"> Next enemy</button> </td>
@@ -70,29 +65,61 @@
             </tr>
         </table>
 
-        <table id="ShopTable" style="width:100%">
-        </table>
-
-
-
-        <table style="width:100%;">
-            <tr>
-                <td onclick="ShopPageFirst()"></td>
-                <td> <button style="width:100%;background-color:black;" onclick="ShopPagePrev()"> <-- </button> </td>
-                <td  style="border: 1px solid black;width:10%" id="ShopPage"></td>
-                <td> <button style="width:100%;background-color:black;" onclick="ShopPageNext()"> --> </button> </td>
-                <td onclick="ShopPageLast()"></td>
-            </tr>
-        </table>
-
-        <br>
-        <table id="ExpShopTable" style="width:100%">
-        </table>
-        <br>
-        <table id="WeaponMastery" style="width:100%">
-        </table>
     </div>
 
+    <div class="container text-center"style="width: 95%;">
+        <div style="width: 100%; overflow: hidden;">
+            <div style="width: 49%; float: left;">
+                <table id="ShopTable" style="width:100%">
+                </table>
+           
+        
+        
+                <table style="width:100%;">
+                    <tr>
+                        <td onclick="ShopPageFirst()"></td>
+                        <td> <button style="width:100%;background-color:black;" onclick="ShopPagePrev()"> <-- </button> </td>
+                        <td  style="border: 1px solid black;width:10%" id="ShopPage"></td>
+                        <td> <button style="width:100%;background-color:black;" onclick="ShopPageNext()"> --> </button> </td>
+                        <td onclick="ShopPageLast()"></td>
+                    </tr>
+                </table>
+
+                <br>
+                <table id="WeaponMastery" style="width:100%">
+                </table>
+            </div>
+            <div style="margin-left: 51%;">
+                <table id="ExpShopTable" style="width:100%">
+                </table>
+                <br>
+                <table id="WeaponMasteryDetails" style="width:100%">
+                </table>
+
+                <table style="width:100%;">
+                    <tr>
+                        <td onclick="ShopPageFirst()"></td>
+                        <td> <button style="width:100%;background-color:black;" onclick="MasteryPagePrev()"> <-- </button> </td>
+                        <td  style="border: 1px solid black;width:10%" id="MasteryPage"></td>
+                        <td> <button style="width:100%;background-color:black;" onclick="MasteryPageNext()"> --> </button> </td>
+                        <td onclick="ShopPageLast()"></td>
+                    </tr>
+                </table>
+
+            </div>
+       </div>
+
+
+       
+
+        <br>
+
+        <br>
+
+    </div>
+    <div class="container text-center">
+        <button style="width:20%;background-color:black;" onclick="ResetValues()"> Reset</button> 
+    </div>
     <footer class="text-center">
         <p>Mochi Box</p>
     </footer>
@@ -101,7 +128,6 @@
 
 </body>
 
-<script type="text/javascript" src="break_infinity.js"></script>
 <script type="text/javascript" src="script.js"></script>
 
 </html>

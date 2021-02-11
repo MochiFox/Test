@@ -1,99 +1,14 @@
-
 body {
   font: 400 14px/1.8 Lato, sans-serif;
   color: rgb(255, 255, 255);
   background-color:rgb(80, 80, 80);
-}
-h3,
-h4 {
-  margin: 10px 0 30px 0;
-  letter-spacing: 10px;
-  font-size: 20px;
-  color: rgb(255, 255, 255);
-}
-.container {
-  padding: 80px 40px;
-}
-.person {
-  border: 10px solid transparent;
-  margin-bottom: 25px;
-  width: 80%;
-  height: 80%;
-  opacity: 0.7;
-}
-.person:hover {
-  border-color: #f1f1f1;
-}
-.bg-1 {
-  background: #2d2d30;
-  color: #bdbdbd;
-}
-.bg-1 h3 {
-  color: #fff;
-}
-.bg-1 p {
-  font-style: italic;
-}
-.list-group-item:first-child {
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
-}
-.list-group-item:last-child {
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.thumbnail {
-  padding: 0 0 15px 0;
-  border: none;
-  border-radius: 0;
-  -webkit-border-bottom-right-radius: 10px;
-  -webkit-border-bottom-left-radius: 10px;
-  -moz-border-radius-bottomright: 10px;
-  -moz-border-radius-bottomleft: 10px;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  -webkit-border-top-left-radius: 10px;
-  -webkit-border-top-right-radius: 10px;
-  -moz-border-radius-topleft: 10px;
-  -moz-border-radius-topright: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-.thumbnail p {
-  margin-top: 15px;
-  color: #555;
-}
-.btn {
-  padding: 10px 20px;
-  background-color: #333;
-  color: #f1f1f1;
-  border-radius: 0;
-  transition: 0.2s;
-}
-.btn:hover,
-.btn:focus {
-  border: 1px solid #333;
-  background-color: #fff;
-  color: #000;
-}
-.modal-header,
-h4,
-.close {
-  background-color: #333;
-  color: #fff !important;
-  text-align: center;
-  font-size: 30px;
-}
-.modal-header,
-.modal-body {
-  padding: 40px 50px;
-}
-.nav-tabs li a {
-  color: #777;
-}
-.tab-content,
-.leftalign {
-  text-align: left;
+  -webkit-user-select: none;
+
+  -moz-user-select: -moz-none;
+
+  -ms-user-select: none;
+
+  user-select: none;
 }
 .navbar {
   font-family: Montserrat, sans-serif;
@@ -104,106 +19,37 @@ h4,
   letter-spacing: 4px;
   opacity: 0.9;
 }
-.navbar li a,
-.navbar .navbar-brand {
-  color: #d5d5d5 !important;
-}
-.navbar-nav li a:hover {
-  color: #fff !important;
-}
-.navbar-nav li.active a {
-  color: #fff !important;
-  background-color: #29292c !important; /*Navbar selected item background*/
-}
-.navbar-default .navbar-toggle {
-  border-color: transparent;
-}
-.open .dropdown-toggle {
-  color: #fff;
-  background-color: #555 !important; /*Navbar dropdown*/
-}
-.dropdown-menu li a {
-  color: #000 !important;
-}
-.dropdown-menu li a:hover {
-  background-color: red !important; /*Navbar dropdown hover color*/
-}
-footer {
-  background-color: #2d2d30; /*Footer background*/
-  color: #f5f5f5;
-  padding: 32px;
-}
-footer a {
-  color: #f5f5f5; /*Footer back to top*/
-}
-footer a:hover {
-  color: #777; /*Footer back to top hover*/
-  text-decoration: none;
-}
-.form-control {
-  border-radius: 0;
-}
-textarea {
-  resize: none;
-}
-/* Go from 0% to 100% opacity (see-through) and specify the percentage from when to slide in the element along the Y-axis */
-@keyframes slide {
-  0% {
-    opacity: 0;
-    transform: translateY(70%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0%);
-  }
-}
-@-webkit-keyframes slide {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateY(70%);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: translateY(0%);
-  }
-}
-
-.rounded img {
-  -webkit-border-bottom-right-radius: 10px;
-  -webkit-border-bottom-left-radius: 10px;
-  -moz-border-radius-bottomright: 10px;
-  -moz-border-radius-bottomleft: 10px;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  -webkit-border-top-left-radius: 10px;
-  -webkit-border-top-right-radius: 10px;
-  -moz-border-radius-topleft: 10px;
-  -moz-border-radius-topright: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-.search {
-  margin: 10px;
-}
-
-
-.unit {
-  cursor: pointer;
-}
-
 .ShopTableCells {
-  border: 1px solid black;height:35px;color:black; background-color:rgb(88, 94, 122);
+  border: 1px solid black;
+  height:35px;
+  color:black; 
+  background-color:rgb(88, 94, 122);
 }
 .ShopTableHeader {
-  border: 1px solid black;height:35px;color:black; background-color:rgb(121, 134, 187);
+  border: 1px solid black;
+  height:35px;
+  color:black; 
+  background-color:rgb(121, 134, 187);
   table-layout: fixed;
   width: 100px;
 }
 .ShopTableSmall {
-  border: 1px solid black;height:35px;color:black; background-color:rgb(121, 134, 187);
+  border: 1px solid black;
+  height:35px;color:black;
+  background-color:rgb(121, 134, 187);
   table-layout: fixed;
   width: 50px;
 }
 .ShopTableOwned{
-  border: 1px solid black;height:35px;color:rgb(255, 255, 255); background-color:rgb(22, 22, 43);padding:0px 5px; font-family:Arial;
+  border: 1px solid black;
+  height:35px;
+  color:rgb(255, 255, 255); 
+  background-color:rgb(22, 22, 43);
+  padding:0px 5px; 
+  font-family:Arial;
+}
+
+.CombatLog{
+  line-height:0.8;
+  text-align: left;
 }
