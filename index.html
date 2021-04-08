@@ -44,13 +44,23 @@
                 <td>Buffs List: <br><p class="leftalign" id="BuffsList"></p></td>
             </tr>
         </table>
-        <p class="leftalign" id="Stats"></p>
+        
         
         <p class="leftalign" id="DisplayDead"></p>
         
-        <p class="leftalign" id="Contributions"></p>
-        <button style="width:25%;background-color:rgb(117, 117, 117);" onclick="ToggleStats()"> Toggle stats</button>
-        <button style="width:25%;background-color:rgb(117, 117, 117);" onclick="ToggleContr()"> Toggle damage breakdown</button>
+        <table style="width:100%;table-layout: fixed;">
+            <tr>
+                <td><button style="width:75%;background-color:rgb(117, 117, 117);" onclick="ToggleStats()"> Toggle stats</button></td>
+                <td><button style="width:75%;background-color:rgb(117, 117, 117);" onclick="ToggleContr()"> Toggle damage breakdown</button></td>
+            </tr>
+            <tr>
+                <td><p class="leftalign" id="Stats"></p></td>
+                <td><p class="leftalign" id="Contributions"></p></td>
+            </tr>
+        </table>
+        
+        
+        
         <br />
 
 
@@ -60,13 +70,14 @@
                 <td></td>
             </tr>
             <tr>
-                <td> <button style="width:100%;background-color:black;" onclick="NextEnemy()"> Next enemy</button> </td>
                 <td> <button style="width:100%;background-color:black;" onclick="LastEnemy()"> Previous enemy</button> </td>
+                <td> <button style="width:100%;background-color:black;" onclick="NextEnemy()"> Next enemy</button> </td>
+                
             </tr>
         </table>
 
     </div>
-
+    <br>
     <div class="container text-center"style="width: 95%;">
         <div style="width: 100%; overflow: hidden;">
             <div style="width: 49%; float: left;">
@@ -93,6 +104,8 @@
                 <table id="ExpShopTable" style="width:100%">
                 </table>
                 <br>
+
+                <table style="width:50%;" class="ShopTableOwned" id="currentWeapon"></table>
                 <table id="WeaponMasteryDetails" style="width:100%">
                 </table>
 
