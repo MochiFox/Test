@@ -57,8 +57,58 @@ body {
 .ShopTableSpecial{
   border: 1px solid black;
   height:35px;
-  color:rgb(17, 12, 66); 
-  background-color:rgb(212, 212, 255);
+  color:rgb(255, 255, 255); 
+  background-color:rgb(170, 170, 255);
   padding:0px 0px; 
   font-family:Arial;
 }
+
+.toolTarget {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.toolTarget .toolHover {
+  visibility: hidden;
+  width: 300%;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.toolTarget:hover .toolHover {
+  visibility: visible;
+}
+
+.toolTarget2 {
+  position: relative;
+}
+
+.toolTarget2 .toolHover2 {
+  visibility: hidden;
+  width: 50%;
+  background-color: rgba(0, 0, 0, 0.308);
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -100%;
+  left: 50%;
+  margin-left: -25%;
+}
+
+.toolTarget2:hover .toolHover2 {
+  visibility: visible;
+}
+

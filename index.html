@@ -70,8 +70,8 @@
                 <td></td>
             </tr>
             <tr>
-                <td> <button style="width:100%;background-color:black;" onclick="LastEnemy()"> Previous enemy</button> </td>
-                <td> <button style="width:100%;background-color:black;" onclick="NextEnemy()"> Next enemy</button> </td>
+                <td> <p class="toolTarget2"> <button style="width:100%;background-color:black;" onclick="LastEnemy()"> Previous enemy </button> <span id="lastEnemyName" class="toolHover2"></span></p></td>
+                <td> <p class="toolTarget2"> <button style="width:100%;background-color:black;" onclick="NextEnemy()"> Next enemy </button> <span id="nextEnemyName" class="toolHover2"></span></div></p></td>
                 
             </tr>
         </table>
@@ -81,11 +81,10 @@
     <div class="container text-center"style="width: 95%;">
         <div style="width: 100%; overflow: hidden;">
             <div style="width: 49%; float: left;">
+                <table style="width:50%;" class="ShopTableOwned"><th class="container text-center">Weapon Shop</th></table>
                 <table id="ShopTable" style="width:100%">
                 </table>
-           
-        
-        
+
                 <table style="width:100%;">
                     <tr>
                         <td onclick="ShopPageFirst()"></td>
@@ -97,14 +96,15 @@
                 </table>
 
                 <br>
+                <table style="width:50%;" class="ShopTableOwned"><th class="container text-center">Weapon XP</th></table>
                 <table id="WeaponMastery" style="width:100%">
                 </table>
             </div>
             <div style="margin-left: 51%;">
+                <table style="width:50%;" class="ShopTableOwned"><th class="container text-center">Stats shop</th></table>
                 <table id="ExpShopTable" style="width:100%">
                 </table>
                 <br>
-
                 <table style="width:50%;" class="ShopTableOwned" id="currentWeapon"></table>
                 <table id="WeaponMasteryDetails" style="width:100%">
                 </table>
@@ -138,6 +138,7 @@
     </footer>
 
     <button type="button" onclick="Debug()">Try it</button>
+    <button type="button" onclick="instakill()">Try it</button>
 
 </body>
 
